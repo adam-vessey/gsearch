@@ -37,9 +37,18 @@ public class URIResolverImpl implements URIResolver {
 
 	public Source resolve(String href, String base) throws TransformerException {
 		Source source = null;
+		URL baseUrl = null;
 		URL url;
 		try {
-			url = new URL(href);
+		    baseUrl = new URL(base);
+		} catch (MalformedURLException e) {
+		    if (logger.isDebugEnabled())
+		        logger.debug("Bad base (continuing): MalformedURLException href="+href+" base="+base+" exception="+e);
+		}
+		
+		try {
+		    
+			url = new URL(baseUrl, href);
 		} catch (MalformedURLException e) {
 			// the XSLT processor should try to resolve the URI itself, 
 			// here it may be a location path, which it can resolve
