@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import java.util.Date;
@@ -70,9 +71,12 @@ public class GTransformer {
         Transformer transformer = null;
         String xsltPathName = "/"+xsltPath+".xslt";
         try {
-            InputStream stylesheet = Config.class.getResourceAsStream(xsltPathName);
-            if (stylesheet==null) {
+            File file = new File(Config.class.getResource(xsltPathName).toURI());
+            if (!file.exists()) {
                 throw new ConfigException(xsltPathName+" not found");
+            }
+            else if (!file.canRead()) {
+                throw new ConfigException(xsltPathName+" not readable");
             }
 			TransformerFactory tfactory;
 			if ("saxon".equals(Config.getCurrentConfig().getXsltProcessor())) {
@@ -90,7 +94,7 @@ public class GTransformer {
 			} else {
 				tfactory = new org.apache.xalan.processor.TransformerFactoryImpl();
 			}
-            StreamSource xslt = new StreamSource(stylesheet);
+            StreamSource xslt = new StreamSource(file);
             transformer = tfactory.newTransformer(xslt);
             if (uriResolver!=null)
              transformer.setURIResolver(uriResolver);
@@ -98,6 +102,8 @@ public class GTransformer {
             throw new ConfigException("getTransformer "+xsltPathName+":\n", e);
         } catch (TransformerFactoryConfigurationError e) {
             throw new ConfigException("getTransformerFactory "+xsltPathName+":\n", e);
+        } catch (URISyntaxException e) {
+            throw new ConfigException("URISyntaxException "+xsltPathName+":\n", e);
         }
         if (logger.isDebugEnabled())
             logger.debug("getTransformer transformer="+transformer+" uriResolver="+uriResolver);
