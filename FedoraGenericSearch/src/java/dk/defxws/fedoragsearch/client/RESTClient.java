@@ -17,7 +17,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 
-import sun.misc.BASE64Encoder;
+import org.apache.commons.codec.binary.Base64;
 
 /**
  * Performs REST operations from command line with runRESTClient.
@@ -146,7 +146,7 @@ public class RESTClient {
         try {
             conn = url.openConnection();
             conn.setRequestProperty("Authorization",
-            		"Basic "+(new BASE64Encoder()).encode((System.getProperty("fedoragsearch.fgsUserName")+":"+System.getProperty("fedoragsearch.fgsPassword")).getBytes()));
+            		"Basic "+(new Base64()).encode((System.getProperty("fedoragsearch.fgsUserName")+":"+System.getProperty("fedoragsearch.fgsPassword")).getBytes()));
             conn.connect();
         } catch (IOException e) {
             e.printStackTrace();

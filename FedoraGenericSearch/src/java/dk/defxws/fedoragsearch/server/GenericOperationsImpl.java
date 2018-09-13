@@ -50,7 +50,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 
-import sun.misc.BASE64Encoder;
+import org.apache.commons.codec.binary.Base64;
 
 /**
  * performs the generic parts of the operations
@@ -377,7 +377,7 @@ public class GenericOperationsImpl implements Operations {
 	          throw new GenericSearchException("processEmbeddedQuery url.openConnection() exception="+e.toString());
 		}
         conn.setRequestProperty("Authorization", 
-        		"Basic "+(new BASE64Encoder()).encode(userPassword.getBytes()));
+        		"Basic "+(new Base64()).encode(userPassword.getBytes()));
         try {
 			conn.connect();
 		} catch (IOException e) {

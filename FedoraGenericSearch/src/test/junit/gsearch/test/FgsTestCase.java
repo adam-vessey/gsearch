@@ -12,7 +12,7 @@ import org.custommonkey.xmlunit.XMLTestCase;
 
 import dk.defxws.fedoragsearch.client.SOAPClient;
 
-import sun.misc.BASE64Encoder;
+import org.apache.commons.codec.binary.Base64;
 
 /**
  * Base class for GSearch Test Cases 
@@ -47,7 +47,7 @@ public abstract class FgsTestCase
         URLConnection conn = null;
         conn = url.openConnection();
         conn.setRequestProperty("Authorization", 
-        		"Basic "+(new BASE64Encoder()).encode((System.getProperty("fedoragsearch.fgsUserName")+":"+System.getProperty("fedoragsearch.fgsPassword")).getBytes()));
+        		"Basic "+(new Base64()).encode((System.getProperty("fedoragsearch.fgsUserName")+":"+System.getProperty("fedoragsearch.fgsPassword")).getBytes()));
         conn.connect();
         content = null;
         content = conn.getContent();
