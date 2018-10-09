@@ -394,7 +394,7 @@ public class OperationsImpl extends GenericOperationsImpl {
     	if (logger.isDebugEnabled())
     		logger.debug("sendToSolr solrCommand="+solrCommand+"\nPost parameters=\n" + postParameters);
     	String base = config.getIndexBase(indexName);
-    	URI uri = new URI(base+solrCommand);
+    	URI uri = new URI(base+solrCommand+(solrCommand.contains("?") ? "&" : "?")+"version=2.2&wt=xml");
 		URL url = uri.toURL();
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
